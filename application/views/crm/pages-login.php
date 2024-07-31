@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Register - Admin</title>
+  <title>Login - Admin</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -34,7 +34,7 @@
 
 <main>
   <div class="container">
-    <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+    <section class="section login min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
@@ -49,27 +49,18 @@
             <div class="card mb-3">
               <div class="card-body">
                 <div class="pt-4 pb-2">
-                  <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
-                  <p class="text-center small">Fill in the form below to create a new account</p>
+                  <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
+                  <p class="text-center small">Enter your username & password to login</p>
                 </div>
 
-                <form id="registerForm" class="row g-3 needs-validation" novalidate>
-                  <div class="col-12">
-                    <label for="yourName" class="form-label">Name</label>
-                    <input type="text" name="name" class="form-control" id="name" required>
-                    <div class="invalid-feedback">Please enter your name.</div>
-                  </div>
-
-                  <div class="col-12">
-                    <label for="yourEmail" class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" id="email" required>
-                    <div class="invalid-feedback">Please enter a valid email address!</div>
-                  </div>
-
+                <form id="loginForm" class="row g-3 needs-validation" novalidate>
                   <div class="col-12">
                     <label for="yourUsername" class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" id="username" required>
-                    <div class="invalid-feedback">Please choose a username.</div>
+                    <div class="input-group has-validation">
+                      <span class="input-group-text" id="inputGroupPrepend">@</span>
+                      <input type="text" name="username" class="form-control" id="username" required>
+                      <div class="invalid-feedback">Please enter your username.</div>
+                    </div>
                   </div>
 
                   <div class="col-12">
@@ -78,19 +69,17 @@
                     <div class="invalid-feedback">Please enter your password!</div>
                   </div>
 
-                  <!-- <div class="col-12">
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" name="terms" value="true" id="acceptTerms" required>
-                      <label class="form-check-label" for="acceptTerms">I agree and accept the <a href="#">terms and conditions</a></label>
-                      <div class="invalid-feedback">You must agree before submitting.</div>
-                    </div>
-                  </div> -->
-
                   <div class="col-12">
-                    <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
+                      <label class="form-check-label" for="rememberMe">Remember me</label>
+                    </div>
                   </div>
                   <div class="col-12">
-                    <p class="small mb-0">Already have an account? <a href="<?php echo base_url()?>index.php/login">Log in</a></p>
+                    <button class="btn btn-primary w-100" type="submit">Login</button>
+                  </div>
+                  <div class="col-12">
+                    <p class="small mb-0">Don't have an account? <a href="<?php echo base_url()?>index.php/Login/register">Create an account</a></p>
                   </div>
                   <div id="responseMessage" class="col-12"></div>
                 </form>
@@ -122,10 +111,10 @@
 <script src="<?php echo base_url();?>assets/js/main.js"></script>
 <script>
   $(document).ready(function() {
-    $('#registerForm').on('submit', function(event) {
+    $('#loginForm').on('submit', function(event) {
       event.preventDefault(); // Prevent the form from submitting the default way
       $.ajax({
-        url: "<?php echo base_url(); ?>index.php/Login/register",
+        url: "<?php echo base_url(); ?>index.php/Login/login",
         method: "POST",
         data: $(this).serialize(),
         dataType: "json",
@@ -133,7 +122,7 @@
           if (data.success) {
             $('#responseMessage').html('<p style="color:green;">' + data.message + '</p>');
             setTimeout(function() {
-              window.location.href = "<?php echo base_url(); ?>index.php/Login"; // Redirect to login page
+              window.location.href = "<?php echo base_url(); ?>index.php/dashboard"; // Redirect to a logged-in page
             }, 2000);
           } else {
             $('#responseMessage').html('<p style="color:red;">' + data.message + '</p>');
