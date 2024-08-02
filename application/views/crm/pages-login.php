@@ -65,8 +65,11 @@
 
                   <div class="col-12">
                     <label for="yourPassword" class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" id="password" required>
+                    <div class="input-group has-validation">
+                    <span class="input-group-text"><i class="bi bi-eye-slash" id="togglePassword"></i></span>
+                    <input type="password" name="password" class="form-control" id="password" required>        
                     <div class="invalid-feedback">Please enter your password!</div>
+                    </div>
                   </div>
 
                   <div class="col-12">
@@ -110,31 +113,53 @@
 <!-- Template Main JS File -->
 <script src="<?php echo base_url();?>assets/js/main.js"></script>
 <script>
-  $(document).ready(function() {
+ $(document).ready(function() {
     $('#loginForm').on('submit', function(event) {
-      event.preventDefault(); // Prevent the form from submitting the default way
-      $.ajax({
-        url: "<?php echo base_url(); ?>index.php/Login/login",
-        method: "POST",
-        data: $(this).serialize(),
-        dataType: "json",
-        success: function(data) {
-          if (data.success) {
-            $('#responseMessage').html('<p style="color:green;">' + data.message + '</p>');
-            setTimeout(function() {
-              window.location.href = "<?php echo base_url(); ?>index.php/dashboard"; // Redirect to a logged-in page
-            }, 2000);
-          } else {
-            $('#responseMessage').html('<p style="color:red;">' + data.message + '</p>');
-          }
-        },
-        error: function() {
-          $('#responseMessage').html('<p style="color:red;">An error occurred while processing your request.</p>');
-        }
-      });
+        event.preventDefault(); // Prevent the form from submitting the default way
+
+        $.ajax({
+            url: "<?php echo base_url(); ?>index.php/Dashboard",
+            method: "POST",
+            data: $(this).serialize(),
+            dataType: "json",
+            success: function(data) {
+                if (data.success) {
+                    $('#responseMessage').html('<p style="color:green;">' + data.message + '</p>');
+                    setTimeout(function() {
+                        window.location.href = "<?php echo base_url(); ?>index.php/Dashboard"; // Redirect to a logged-in page
+                    }, 2000);
+                } else {
+                    $('#responseMessage').html('<p style="color:red;">' + data.message + '</p>');
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('AJAX Error: ', textStatus, errorThrown);
+                $('#responseMessage').html('<p style="color:red;">An error occurred while processing your request.</p>');
+            }
+        });
     });
-  });
+});
+
 </script>
+<script>
+        const togglePassword = document.querySelector("#togglePassword");
+        const password = document.querySelector("#password");
+
+        togglePassword.addEventListener("click", function () {
+            // toggle the type attribute
+            const type = password.getAttribute("type") === "password" ? "text" : "password";
+            password.setAttribute("type", type);
+            
+            // toggle the icon
+            this.classList.toggle("bi-eye");
+        });
+
+        // prevent form submit
+        const form = document.querySelector("form");
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+        });
+    </script>
 </body>
 
 </html>
