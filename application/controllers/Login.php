@@ -13,6 +13,8 @@ class Login extends CI_Controller {
 
     public function index()
     {
+        //phpinfo();
+        //die;
         // Load the login view
         $this->load->view('crm/pages-login');
     }
@@ -96,7 +98,7 @@ class Login extends CI_Controller {
                     );
                     echo json_encode($response);
                 } else {
-                    redirect('Dashboard');
+                    redirect('Dashboard/home');
                 }
             } else {
                 $response = array(

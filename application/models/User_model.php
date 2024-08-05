@@ -18,22 +18,21 @@ class User_model extends CI_Model {
         }
         return FALSE;
     }
-    public function check_user($username, $password)
-    {
-        // Fetch user data from the database
+    public function check_user($username, $password) {
+        // Fetch the user record based on the provided username
         $this->db->where('username', $username);
-        $query = $this->db->get('users'); // Change this to your actual table name
-
+        $query = $this->db->get('users'); // Replace 'users' with your actual users table name
+        
         if ($query->num_rows() == 1) {
             $user = $query->row();
 
-            // Verify password
-            if (password_verify($password, $user->password)) {
-                return $user;
+            // Verify the password using the password_verify function
+            if (password_verify($password, $user->password)) { // Assumes passwords are hashed
+                return $user; // Return the user object on success
             }
         }
-        
-        return FALSE; // Return FALSE if credentials are invalid
+
+        return false; // Return false if authentication fails
     }
 }
 ?>

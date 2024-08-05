@@ -113,30 +113,30 @@
 <!-- Template Main JS File -->
 <script src="<?php echo base_url();?>assets/js/main.js"></script>
 <script>
- $(document).ready(function() {
+    $(document).ready(function() {
     $('#loginForm').on('submit', function(event) {
-        event.preventDefault(); // Prevent the form from submitting the default way
-
+        event.preventDefault();
         $.ajax({
-            url: "<?php echo base_url(); ?>index.php/Dashboard",
-            method: "POST",
-            data: $(this).serialize(),
-            dataType: "json",
-            success: function(data) {
-                if (data.success) {
-                    $('#responseMessage').html('<p style="color:green;">' + data.message + '</p>');
-                    setTimeout(function() {
-                        window.location.href = "<?php echo base_url(); ?>index.php/Dashboard"; // Redirect to a logged-in page
-                    }, 2000);
-                } else {
-                    $('#responseMessage').html('<p style="color:red;">' + data.message + '</p>');
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('AJAX Error: ', textStatus, errorThrown);
-                $('#responseMessage').html('<p style="color:red;">An error occurred while processing your request.</p>');
-            }
-        });
+          url: "<?php echo base_url(); ?>index.php/login", // Correct URL for login endpoint
+          method: "POST",
+          data: $(this).serialize() + "&<?php echo $this->security->get_csrf_token_name(); ?>=<?php echo $this->security->get_csrf_hash(); ?>",
+          dataType: "json",
+          success: function(data) {
+              if (data.success) {
+                  $('#responseMessage').html('<p style="color:green;">' + data.message + '</p>');
+                  setTimeout(function() {
+                      window.location.href = "<?php echo base_url(); ?>index.php/Dashboard/home";
+                  }, 2000);
+              } else {
+                  $('#responseMessage').html('<p style="color:red;">' + data.message + '</p>');
+              }
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+              console.error('AJAX Error: ', textStatus, errorThrown);
+              $('#responseMessage').html('<p style="color:red;">An error occurred while processing your request.</p>');
+          }
+      });
+
     });
 });
 
