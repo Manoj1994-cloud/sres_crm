@@ -1,46 +1,26 @@
-<?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+class Login extends CI_Controller {  
 
-class Login extends CI_Controller {
+	public function USerLogin()
+	{
+		$data=array();
+		$this->load->Model('Login_mod');
+		$data = $this->Login_mod->CheckLogin($_POST);
+        print_r($data);
+        die;
+		if($data!=null)
+		{
+			$this->session->set_userdata('login_user',$data[0]);
+			$data1['message']="Success";
+			print_r(json_encode($data1));
+		}
+		else
+		{
+			$data1['message']="Error";
+			print_r(json_encode($data1));
+		}
+	}
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->load->library(['form_validation', 'session']);
-        $this->load->model('Login_mod');
-    }
-
-    public function index()
-    {
-        /*$this->load->library('encryption');
-        $key = $this->encryption->create_key(16);
-        $key = bin2hex($this->encryption->create_key(16));
-        echo $key; die();*/
-        $this->load->view('crm/pages-login');
-    }
-
-    public function admin_login()
-    {
-        $response = array('success' => FALSE, 'message' => 'Invalid request');
-    
-        // Remove AJAX request check
-        $this->load->model('Login_mod');
-        $postData = $this->input->post();
-        $data = $this->Login_mod->login_admin($postData);
-    
-        if ($data !== FALSE) {
-            $response['success'] = TRUE;
-            $response['message'] = 'Login successful!';
-            $this->session->set_userdata('login_user', $data);
-            // Redirect to a different page or set a success message
-            redirect('Admin'); // Adjust the redirect path as needed
-        } else {
-            $response['message'] = 'Username and password are incorrect';
-            // You can set the response to be rendered in a view
-            $this->load->view('crm/pages-login', $response); // Adjust the view path as needed
-        }
-    }
-    
     public function register()
     {
         if ($this->input->server('REQUEST_METHOD') === 'POST') {
@@ -87,10 +67,10 @@ class Login extends CI_Controller {
         }
     }
 
-    public function logout()
-    {
-        $this->session->unset_userdata('login_user');	
-        redirect('Login');
-    }
+    public function Logout()
+	{
+		$this->session->unset_userdata('login_user');	
+		redirect('Login');
+	}
 }
 ?>
